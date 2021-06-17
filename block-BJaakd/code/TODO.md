@@ -1,39 +1,72 @@
 1. Create a promise. Have it resolve with a value of `Promise Resolved!` in resolve after a delay of 1000ms, using `setTimeout`. Print the contents of the promise after it has been resolved by passing `console.log` to `.then`
 
 ```js
-// Your code
+let fetch = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve(console.log);
+  }, 2000);
+}).then((data) => {
+  data(`Promise Resolved!`);
+});
 ```
 
 2. Create another promise. Now have it reject with a value of `Rejected Promise!` without using `setTimeout`. Print the contents of the promise after it has been rejected by passing console.log to `.catch`
 
 ```js
-// Your code
+let fetch = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject(console.log);
+  }, 2000);
+}).catch((error) => {
+  error(`Rejected Promise!`);
+});
 ```
 
 3. Create another promise. Now have it reject with a value of `Rejected Promise!` without using `setTimeout`. Print the contents of the promise after it has been rejected by passing console.log to `.catch` and also use `.finally` to log message `Promise Settled!`.
 
 ```js
-// Your code
+let fetch = new Promise((resolve, reject) => {
+  reject(`Rejected Promise!`);
+})
+  .catch((error) => {
+    console.log(error);
+  })
+  .finally(() => {
+    console.log(`Promise Settled!`);
+  });
 ```
 
 4. What will be the output of the code below.
 
 ```js
-console.log('A');
+console.log("A");
 
 // Asynchronous code finises in 0 seconds (Callback Queue)
-setTimeout(() => console.log('B'), 0); // callback queue
+setTimeout(() => console.log("B"), 0); // callback queue
 
 // A promise that resolves right away (Microtask Queue)
-Promise.resolve().then(() => console.log('C'));
+Promise.resolve().then(() => console.log("C"));
 
-console.log('D');
+console.log("D");
+
+//A
+//D
+//C
+//B
 ```
 
 5. Write a function named `wait` that accepts `time` in ms returns a promise. The promise gets resolved after given time.
 
 ```js
-// Your code
+let wait = (time) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(`Promise Resolved`);
+    }, time);
+  }).then((data) => {
+    console.log(data);
+  });
+};
 ```
 
 6. Do the following:
@@ -46,7 +79,25 @@ console.log('D');
 - Catch the error using `.catch`
 
 ```js
-// Your code
+let newPromise = new Promise((resolve, reject) => {
+  resolve(21);
+})
+  .then((data) => {
+    return data + 10;
+  })
+  .then((data) => {
+    return data + 100;
+  })
+  .then((data) => {
+    return new Promise((resolve, reject) => {
+      if (data > 100) {
+        reject(`This is greater than 100`);
+      }
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 ```
 
 7. Do the following:
@@ -58,7 +109,23 @@ console.log('D');
 - Use `.then` and log the value
 
 ```js
-// Your code
+let newPromise = new Promise((resolve, reject) => {
+  resolve(["A"]);
+})
+  .then((data) => {
+    return data + `B`;
+  })
+  .then((data) => {
+    data = data.split("");
+    data = data.reduce((acc, cv, id) => {
+      acc[id] = cv;
+      return acc;
+    }, {});
+    return data;
+  })
+  .then((data) => {
+    console.log(data);
+  });
 ```
 
 8. Do the following:
@@ -69,7 +136,22 @@ console.log('D');
 - Chain `.then` on above and return `4` also check the value you get access to by logging
 
 ```js
-// Your code
+let first = new Promise((resolve, reject) => {
+  resolve(1);
+})
+  .then((data) => {
+    console.log(data);
+    return 2;
+  })
+  .then((data) => {
+    console.log(data);
+    return 3;
+  })
+  .then((data) => {
+    console.log(data);
+    return 4;
+  });
+console.log(first);
 ```
 
 9. Do the following:
@@ -93,5 +175,23 @@ console.log('D');
 - Use `.then` to log the value
 
 ```js
-// Your code
+let name = new Promise((resolve, reject) => {
+  resolve(`John`);
+})
+  .then((data) => {
+    return new Promise((resolve, reject) => {
+      resolve(`Arya`);
+    });
+  })
+  .then((data) => {
+    console.log(data);
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(`Bran`);
+      }, 2000);
+    });
+  })
+  .then((data) => {
+    console.log(data);
+  });
 ```
