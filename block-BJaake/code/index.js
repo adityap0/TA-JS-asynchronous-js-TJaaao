@@ -5,8 +5,7 @@ let fetch = (url) => {
     let xhr = new XMLHttpRequest();
     xhr.open(`GET`, url);
     xhr.onload = () => {
-      let data = JSON.parse(xhr.response);
-      return resolve(data);
+      return resolve(xhr.response);
     };
     xhr.onerror = () => {
       return reject(`Something went wrong...`);
@@ -24,13 +23,22 @@ select.onchange = (event) => {
         "https://api.spaceflightnewsapi.net/v3/articles?_limit=30"
       )
         .then((data) => {
-          data.forEach((item, id) => {
-            if (item.newsSite === selected) {
-              cre8News(item.imageUrl, item.newsSite, item.title);
-            }
-          });
+          if (data.ok === false) {
+            throw new Error(`Error Happened : ${data.status}`);
+          }
+          return JSON.parse(data);
+        })
+        .then((data) => {
+          if (Array.isArray(data)) {
+            data.forEach((item, id) => {
+              if (item.newsSite === selected) {
+                cre8News(item.imageUrl, item.newsSite, item.title);
+              }
+            });
+          }
         })
         .catch((error) => {
+          root.innerText = error;
           console.log(error);
         })
         .finally(() => {
