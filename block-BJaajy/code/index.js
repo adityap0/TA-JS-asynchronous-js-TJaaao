@@ -1,4 +1,4 @@
-// //1
+// // //1
 let x1 = new Promise((resolve, reject) => {
   setTimeout(() => {
     resolve(Math.floor(Math.random() * 100));
@@ -22,7 +22,28 @@ let x4 = new Promise((resolve, reject) => {
 Promise.all([x1, x2, x3, x4]).then((values) => {
   console.log(values);
 });
-
+//2
+let fetchx = (url) => {
+  return new Promise((resolve, reject) => {
+    let xhr = new XMLHttpRequest();
+    xhr.open(`GET`, url);
+    xhr.onload = () => {
+      return resolve(xhr.response);
+    };
+    xhr.send();
+  });
+};
+let users = [`getify`, `nnnkit`, `adityap0`, `prank7`];
+let usersPromises = users.map((user) => {
+  return fetchx(`https://api.github.com/users/${user}`).then((res) => {
+    return JSON.parse(res);
+  });
+});
+Promise.all(usersPromises).then((users) => {
+  users.forEach((user) => {
+    console.log(user.followers);
+  });
+});
 //3
 let fetch = (url, contestant) => {
   return new Promise((resolve, reject) => {
@@ -72,5 +93,5 @@ Promise.all([
   "Sam",
   { name: "John" },
 ]).then(console.log);
-//(3) ["Arya", "Sam", {…}]
-//time taken 1 second
+// (3) ["Arya", "Sam", {…}]
+// time taken 1 second
